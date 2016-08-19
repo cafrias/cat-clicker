@@ -3,23 +3,68 @@
 (function mainIIFE() {
 'use strict';
 
+// Execute Main function on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', main);
 
 // FUNCTION DEFINITIONS ________________________________________________________
 
+/**
+ * Main function instanciates MVC objects and initializes the view calling
+ * `__VIEW__.init()` method.
+ * 
+ * @function main
+ */
 function main() {
+
+	/**
+	 * An instance of `_MODEL_` holds all logic relative to the *model* part ot the
+	 * application.
+	 *
+	 * @class _MODEL_
+	 * @static
+	 */
 	var _MODEL_ = {
+		/**
+		 * Holds all Cat instances of the application.
+		 * 
+		 * @property cats
+		 * @type Array
+		 */
 		cats: [
 			new Cat(1, 'pepe', 'https://lh3.ggpht.com/nlI91wYNCrjjNy5f-S3CmVehIBM4cprx-JFWOztLk7vFlhYuFR6YnxcT446AvxYg4Ab7M1Fy0twaOCWYcUk=s0#w=640&h=426'),
 			new Cat(2, 'diego', 'https://lh3.ggpht.com/kixazxoJ2ufl3ACj2I85Xsy-Rfog97BM75ZiLaX02KgeYramAEqlEHqPC3rKqdQj4C1VFnXXryadFs1J9A=s0#w=640&h=496'),
 			new Cat(3, 'mary and lucy', 'https://lh5.ggpht.com/LfjkdmOKkGLvCt-VuRlWGjAjXqTBrPjRsokTNKBtCh8IFPRetGaXIpTQGE2e7ZCUaG2azKNkz38KkbM_emA=s0#w=640&h=454')
 		]
 	};
-	
+
+	/**
+	 * An instance of `_CONTROLLER_` holds all logic relative to the *controller*
+	 * part ot the application.
+	 *
+	 * @class _CONTROLLER_
+	 * @static
+	 */
 	var _CONTROLLER_ = {
+
+		/**
+		 * Returns a reference to all instances of Cat in the application, this
+		 * method calls `_MODEL_.cats`.
+		 * 
+		 * @property getCats
+		 * @return {[Array]} Array of instances of Cat in the application.
+		 */
 		getCats: function() {
 			return _MODEL_.cats;
 		},
+
+		/**
+		 * Holds the logic for adding one to the `counter` of a given `Cat` instance
+		 * represented with the `catIndex` parameter.
+		 *
+		 * @property catClicked
+		 * @param  {Array} catIndex         The index in which the Cat instance is stored in _MODEL_.cats array.
+		 * @param  {Element} counterContainer A reference to the DOM Element that displays the value of `Cat.counter`.
+		 */
 		catClicked: function(catIndex, counterContainer) {
 			var clickedCat = _MODEL_.cats[catIndex];
 			
@@ -29,32 +74,108 @@ function main() {
 		}
 	};
 
+	/**
+	 * An instance of `_VIEW_` holds all logic relative to the *view*
+	 * part ot the application. This instance holds private properties as opposed
+	 * to `_CONTROLLER_` and `_MODEL_`.
+	 *
+	 * @class _VIEW_
+	 * @static
+	 */
 	var _VIEW_ = (function viewInstanciator() {
-		// Private props
 		
+		/**
+		 * A reference to the DOM Element which will/is displaying the currently
+		 * active `Cat` instance.
+		 *
+		 * @property mainContainer
+		 * @type Element
+		 * @private
+		 */
 		var mainContainer = document.getElementById('cat-details');
+
+		/**
+		 * A reference to the DOM Element which contains the list of `Cat` instances.
+		 * (a.k.a. the sidebar).
+		 *
+		 * @property sidebarContainer
+		 * @type Element
+		 * @private
+		 */
 		var sidebarContainer = document.getElementById('side-bar');
 
+		/**
+		 * Holds references to each DOM Element representing items in the sidebar
+		 * inside `sidebarContainer`.
+		 *
+		 * @property items
+		 * @type Array
+		 * @private
+		 */
 		var items = [];
 
+		/**
+		 * Holds the name of the CSS class that holds the styles for an active option.
+		 *
+		 * @property activeClass
+		 * @type String
+		 * @private
+		 */
 		var activeClass = 'option--active';
 
+		/**
+		 * Holds the value of the index representing the `Cat` instance currently
+		 * being displayed.
+		 *
+		 * @property activeIndex
+		 * @type Number
+		 * @private
+		 */
 		var activeIndex = 1;
 
+		/**
+		 * Adds `activeClass` CSS class to `element`.
+		 *
+		 * @method  makeActive
+		 * @param  {Element} element Element to make active
+		 * @private
+		 */
 		var makeActive = function(element) {
 			activeIndex = element.attributes['data-id'].value - 1;
 			element.classList.add(activeClass);
 		};
 
+		/**
+		 * Removes `activeClass` CSS class from `element`.
+		 *
+		 * @method  makeInactive
+		 * @param  {Element} element Element to make inactive
+		 * @private
+		 */
 		var makeInactive = function(element) {
 			element.classList.remove(activeClass);
 		};
 
+		/**
+		 * Calls the render method of `element` inside the given `container`.
+		 *
+		 * @method renderMain
+		 * @param  {Element} container Element that will contain the rendered HTML
+		 * @param  {Element} element   Element that will generate the HTML
+		 * @private
+		 */
 		var renderMain = function(container, element) {
 			container.innerHTML = '';
 			element.render(container);
 		};
 		
+		/**
+		 * Renders the side-bar menu based on the cats instances passed in `cats`.
+		 *
+		 * @method  renderMenu
+		 * @param  {Array} cats Instances of Cat.
+		 * @private
+		 */
 		var renderMenu = function(cats) {
 			cats.forEach(function navIterator(cat, i) {
 				var li = document.createElement('li');
@@ -68,10 +189,19 @@ function main() {
 
 				sidebarContainer.appendChild(li);
 			});
-
-			// renderMain(mainContainer, cats[0]);
 		};
 
+		/**
+		 * Handles the click event on the menu. It is:
+		 * - Toggles active/inactive option.
+		 * - Renders corresponding cat in main view.
+		 *
+		 * @method clickHandler
+		 * @param  {Object} evt           Event object from the triggered event.
+		 * @param  {Array} cats          Array of all Cat instances.
+		 * @param  {Element} mainContainer Container of the main view.
+		 * @private
+		 */
 		var clickHandler = function(evt, cats, mainContainer) {
 			var clickedIndex = evt.target.attributes['data-id'].value - 1;
 
@@ -83,8 +213,15 @@ function main() {
 			renderMain(mainContainer, cats[activeIndex]);
 		};
 
-		// Public props
 		return {
+			/**
+			 * Initializes the view, that is:
+			 *
+			 * - Calling the render methods for first time.
+			 * - Assigning Event Listener where corresponding.
+			 *
+			 * @method init
+			 */
 			init: function() {
 				var cats = _CONTROLLER_.getCats();
 				renderMenu(cats);
