@@ -3,189 +3,110 @@
 (function mainIIFE() {
 'use strict';
 
-/**
- * Creates a new instance of `Navigator` if no previous instance exists. Ensures
- * there will be only one instance of `Navigator` in the program.
- *
- * @class NavigatorInstanciator
- * @static
- */
-var navigatorInstanciator = (function NavigatorInstanciator() {
+document.addEventListener('DOMContentLoaded', main);
+
+// FUNCTION DEFINITIONS ________________________________________________________
+
+function main() {
+	var _MODEL_ = {
+		cats: [
+			new Cat(1, 'pepe', 'https://lh3.ggpht.com/nlI91wYNCrjjNy5f-S3CmVehIBM4cprx-JFWOztLk7vFlhYuFR6YnxcT446AvxYg4Ab7M1Fy0twaOCWYcUk=s0#w=640&h=426'),
+			new Cat(2, 'diego', 'https://lh3.ggpht.com/kixazxoJ2ufl3ACj2I85Xsy-Rfog97BM75ZiLaX02KgeYramAEqlEHqPC3rKqdQj4C1VFnXXryadFs1J9A=s0#w=640&h=496'),
+			new Cat(3, 'mary and lucy', 'https://lh5.ggpht.com/LfjkdmOKkGLvCt-VuRlWGjAjXqTBrPjRsokTNKBtCh8IFPRetGaXIpTQGE2e7ZCUaG2azKNkz38KkbM_emA=s0#w=640&h=454')
+		]
+	};
 	
-	/**
-	 * Holds the reference to the unique `Navigator` instance of already instanciated.
-	 * If not, defaults to null.
-	 *
-	 * @property instance
-	 * @type Navigator
-	 */
-	var instance;
+	var _CONTROLLER_ = {
+		getCats: function() {
+			return _MODEL_.cats;
+		},
+		catClicked: function(catIndex, counterContainer) {
+			var clickedCat = _MODEL_.cats[catIndex];
+			
+			if(clickedCat) clickedCat.clicked(counterContainer);
 
-	/**
-	 * Holds all the logic for navigation. It is:
-	 * - Active option
-	 * - Render menu
-	 * - Toggle options
-	 *
-	 * @class Navigator
-	 * @static
-	 */
-	function Navigator() {
+			else throw new Error('No cat with id: ' + (catIndex) + ' found.');
+		}
+	};
 
-		var activeIndex = 0;
+	var _VIEW_ = (function viewInstanciator() {
+		// Private props
+		
+		var mainContainer = document.getElementById('cat-details');
+		var sidebarContainer = document.getElementById('side-bar');
 
-		var options = [];
+		var items = [];
 
-		/**
-		 * Holds the name of the CSS class that holds the styles for an active option.
-		 *
-		 * @property activeClass
-		 * @type String
-		 * @private
-		 */
 		var activeClass = 'option--active';
 
-		/**
-		 * Adds `activeClass` CSS class to `element`.
-		 *
-		 * @method  makeActive
-		 * @param  {Element} element Element to make active
-		 * @private
-		 */
+		var activeIndex = 1;
+
 		var makeActive = function(element) {
 			activeIndex = element.attributes['data-id'].value - 1;
 			element.classList.add(activeClass);
 		};
 
-		/**
-		 * Removes `activeClass` CSS class from `element`.
-		 *
-		 * @method  makeInactive
-		 * @param  {Element} element Element to make inactive
-		 * @private
-		 */
 		var makeInactive = function(element) {
 			element.classList.remove(activeClass);
 		};
 
-		/**
-		 * Calls the render method of `element` inside the given `container`.
-		 *
-		 * @method renderMain
-		 * @param  {Element} container Element that will contain the rendered HTML
-		 * @param  {Element} element   Element that will generate the HTML
-		 * @private
-		 */
 		var renderMain = function(container, element) {
 			container.innerHTML = '';
 			element.render(container);
 		};
+		
+		var renderMenu = function(cats) {
+			cats.forEach(function navIterator(cat, i) {
+				var li = document.createElement('li');
+				li.setAttribute('data-id', cat.id);
+				li.classList.add('option');
+				li.textContent = cat.name;
 
+				if(i === 0) makeActive(li);
+
+				items.push(li);
+
+				sidebarContainer.appendChild(li);
+			});
+
+			// renderMain(mainContainer, cats[0]);
+		};
+
+		var clickHandler = function(evt, cats, mainContainer) {
+			var clickedIndex = evt.target.attributes['data-id'].value - 1;
+
+			if(activeIndex === clickedIndex) return;
+
+			makeInactive(items[activeIndex]);
+			makeActive(items[clickedIndex]);
+
+			renderMain(mainContainer, cats[activeIndex]);
+		};
+
+		// Public props
 		return {
-			/**
-			 * Holds a reference to the sidebar container to which the navigation will be
-			 * appended.
-			 *
-			 * @property sidebarContainer
-			 * @type Element
-			 */
-			sidebarContainer: document.getElementById('side-bar'),
-
-			/**
-			 * Renders the side-bar menu based on the cats instances passed in `cats`.
-			 *
-			 * @method  renderMenu
-			 * @param  {Array} cats Instances of Cat.
-			 */
-			renderMenu: function(cats, mainContainer) {
-				cats.forEach(function navIterator(cat, i) {
-					var li = document.createElement('li');
-					li.setAttribute('data-id', cat.id);
-					li.classList.add('option');
-					li.textContent = cat.name;
-
-					if(i === 0) makeActive(li);
-
-					options.push(li);
-
-					this.sidebarContainer.appendChild(li);
-				}, this);
-
+			init: function() {
+				var cats = _CONTROLLER_.getCats();
+				renderMenu(cats);
 				renderMain(mainContainer, cats[0]);
-			},
 
-			/**
-			 * Handles the click event on the menu. It is:
-			 * - Toggles active/inactive option.
-			 * - Renders corresponding cat in main view.
-			 * 
-			 * @param  {Object} evt           Event object from the triggered event.
-			 * @param  {Array} cats          Array of all Cat instances.
-			 * @param  {Element} mainContainer Container of the main view.
-			 */
-			clickHandler: function(evt, cats, mainContainer) {
-				var clickedIndex = evt.target.attributes['data-id'].value - 1;
+				sidebarContainer.addEventListener('click', function onClickSide(evt) {
+					clickHandler.call({}, evt, _CONTROLLER_.getCats(), mainContainer);
+				});
 
-				if(activeIndex === clickedIndex) return;
-
-				makeInactive(options[activeIndex]);
-				makeActive(options[clickedIndex]);
-
-				renderMain(mainContainer, cats[activeIndex]);
+				mainContainer.addEventListener('click', function onClickMain(evt) {
+					if(evt.target.attributes['data-id']){
+						var clickedId = evt.target.attributes['data-id'].value,
+								counter = document.getElementById('counter-' + clickedId);
+						_CONTROLLER_.catClicked(clickedId-1, counter);
+					}
+				});
 			}
 		};
-	}
+	})();
 
-	return {
-		/**
-		 * Returs the instance of `Navigator` if existing if not creates a new one.
-		 *
-		 * @method getInstance
-		 * @return {Navigator} The single instance of Navigator.
-		 * @for NavigatorInstanciator
-		 */
-		getInstance: function() {
-			if(!instance) {
-				instance = Navigator();
-			}
-
-			return instance;
-		}
-	};
-})();
-
-document.addEventListener('DOMContentLoaded', main);
-
-function main() {
-	var mainContainer = document.getElementById('cat-details'),
-			cats = [],
-			navigator = navigatorInstanciator.getInstance();
-	
-	// Instanciate cats
-	cats.push(new Cat(1, 'pepe', 'https://lh3.ggpht.com/nlI91wYNCrjjNy5f-S3CmVehIBM4cprx-JFWOztLk7vFlhYuFR6YnxcT446AvxYg4Ab7M1Fy0twaOCWYcUk=s0#w=640&h=426'));
-	cats.push(new Cat(2, 'diego', 'https://lh3.ggpht.com/kixazxoJ2ufl3ACj2I85Xsy-Rfog97BM75ZiLaX02KgeYramAEqlEHqPC3rKqdQj4C1VFnXXryadFs1J9A=s0#w=640&h=496'));
-	cats.push(new Cat(3, 'mary and lucy', 'https://lh5.ggpht.com/LfjkdmOKkGLvCt-VuRlWGjAjXqTBrPjRsokTNKBtCh8IFPRetGaXIpTQGE2e7ZCUaG2azKNkz38KkbM_emA=s0#w=640&h=454'));
-
-	// Render sidebar
-	navigator.renderMenu(cats, mainContainer);
-
-	// Render cats
-	// cats.forEach(function renderCats(cat) {
-	// 	cat.render(mainContainer);
-	// });
-	
-	navigator.sidebarContainer.addEventListener('click', function onClick(evt) {
-		navigator.clickHandler.call({}, evt, cats, mainContainer);
-	});
-
-	// Add listener to main
-	mainContainer.addEventListener('click', function onClick(evt) {
-		if(evt.target.attributes['data-id']){
-			var clickedId = evt.target.attributes['data-id'].value,
-					counter = document.getElementById('counter-' + clickedId);
-			cats[clickedId-1].clicked(counter);
-		}
-	});
+	// Initial Render
+	_VIEW_.init();
 }
 
 
