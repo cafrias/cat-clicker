@@ -29,12 +29,27 @@ function main() {
 		 * 
 		 * @property cats
 		 * @type Array
+		 * @default []
 		 */
-		cats: [
-			new Cat(1, 'pepe', 'https://lh3.ggpht.com/nlI91wYNCrjjNy5f-S3CmVehIBM4cprx-JFWOztLk7vFlhYuFR6YnxcT446AvxYg4Ab7M1Fy0twaOCWYcUk=s0#w=640&h=426'),
-			new Cat(2, 'diego', 'https://lh3.ggpht.com/kixazxoJ2ufl3ACj2I85Xsy-Rfog97BM75ZiLaX02KgeYramAEqlEHqPC3rKqdQj4C1VFnXXryadFs1J9A=s0#w=640&h=496'),
-			new Cat(3, 'mary and lucy', 'https://lh5.ggpht.com/LfjkdmOKkGLvCt-VuRlWGjAjXqTBrPjRsokTNKBtCh8IFPRetGaXIpTQGE2e7ZCUaG2azKNkz38KkbM_emA=s0#w=640&h=454')
-		]
+		cats: [],
+
+		/**
+		 * Holds the value of the index representing the `Cat` instance currently
+		 * being displayed.
+		 *
+		 * @property activeIndex
+		 * @type Number
+		 * @default 0
+		 */
+		activeCat: 0,
+
+		init: function() {
+			this.cats = [
+				new Cat(0, 'pepe', 'https://lh3.ggpht.com/nlI91wYNCrjjNy5f-S3CmVehIBM4cprx-JFWOztLk7vFlhYuFR6YnxcT446AvxYg4Ab7M1Fy0twaOCWYcUk=s0#w=640&h=426'),
+				new Cat(1, 'diego', 'https://lh3.ggpht.com/kixazxoJ2ufl3ACj2I85Xsy-Rfog97BM75ZiLaX02KgeYramAEqlEHqPC3rKqdQj4C1VFnXXryadFs1J9A=s0#w=640&h=496'),
+				new Cat(2, 'mary and lucy', 'https://lh5.ggpht.com/LfjkdmOKkGLvCt-VuRlWGjAjXqTBrPjRsokTNKBtCh8IFPRetGaXIpTQGE2e7ZCUaG2azKNkz38KkbM_emA=s0#w=640&h=454')
+			];
+		}
 	};
 
 	/**
@@ -71,6 +86,20 @@ function main() {
 			if(clickedCat) clickedCat.clicked(counterContainer);
 
 			else throw new Error('No cat with id: ' + (catIndex) + ' found.');
+		},
+
+		getActive: function() {
+			return _MODEL_.activeCat;
+			// return 0;
+		},
+
+		setActive: function(newIndex) {
+			_MODEL_.activeCat = newIndex;
+		},
+
+		initApp: function() {
+			_MODEL_.init();
+			_VIEW_.init();
 		}
 	};
 
@@ -124,16 +153,6 @@ function main() {
 		var activeClass = 'option--active';
 
 		/**
-		 * Holds the value of the index representing the `Cat` instance currently
-		 * being displayed.
-		 *
-		 * @property activeIndex
-		 * @type Number
-		 * @private
-		 */
-		var activeIndex = 1;
-
-		/**
 		 * Adds `activeClass` CSS class to `element`.
 		 *
 		 * @method  makeActive
@@ -141,7 +160,9 @@ function main() {
 		 * @private
 		 */
 		var makeActive = function(element) {
-			activeIndex = element.attributes['data-id'].value - 1;
+			var newIndex = element.attributes['data-id'].value;
+
+			_CONTROLLER_.setActive(newIndex);
 			element.classList.add(activeClass);
 		};
 
@@ -203,14 +224,15 @@ function main() {
 		 * @private
 		 */
 		var clickHandler = function(evt, cats, mainContainer) {
-			var clickedIndex = evt.target.attributes['data-id'].value - 1;
+			var clickedIndex = evt.target.attributes['data-id'].value,
+					activeIndex = _CONTROLLER_.getActive();
 
 			if(activeIndex === clickedIndex) return;
 
 			makeInactive(items[activeIndex]);
 			makeActive(items[clickedIndex]);
 
-			renderMain(mainContainer, cats[activeIndex]);
+			renderMain(mainContainer, cats[clickedIndex]);
 		};
 
 		return {
@@ -235,7 +257,7 @@ function main() {
 					if(evt.target.attributes['data-id']){
 						var clickedId = evt.target.attributes['data-id'].value,
 								counter = document.getElementById('counter-' + clickedId);
-						_CONTROLLER_.catClicked(clickedId-1, counter);
+						_CONTROLLER_.catClicked(clickedId, counter);
 					}
 				});
 			}
@@ -243,7 +265,7 @@ function main() {
 	})();
 
 	// Initial Render
-	_VIEW_.init();
+	_CONTROLLER_.initApp();
 }
 
 
