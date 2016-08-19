@@ -1,0 +1,267 @@
+/* dlt - DEFAULTS ___________________________________________________________ */
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* Default font */
+.dlt-ft {
+	font-family: "Helvetica", "Arial", sans-serif;
+	font-size: 16px;
+}
+
+
+/* Border Box */
+.dlt-bbx {
+	box-sizing: border-box;
+}
+
+/* Max width */
+.dlt-max-w {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.dtl-no-pad-mar {
+	padding: 0;
+	margin: 0;
+}
+
+
+/* ps - POSITION ____________________________________________________________ */
+
+/* Position Absolute */
+.ps-abs {
+	position: absolute;
+}
+
+/* Position Relative */
+.ps-rel {
+	position: relative;
+	float: left;
+}
+
+/* Top left */
+.ps-tlf {
+	top: 15px;
+	left: 15px;
+}
+
+/* Bottom center */
+.ps-bcen {
+	bottom: 0px;
+}
+
+/* Z-index */
+.ps-zin-1 {
+	z-index: 1;
+}
+
+.ps-zin-0 {
+	z-index: 0;
+}
+
+/* bg - BACKGROUND __________________________________________________________ */
+
+/* White Transparent */
+.bg-fff-t {
+	background: rgba(255, 255, 255, .5);
+}
+
+/* Black Transparent */
+.bg-000-t {
+	background: rgba(0, 0, 0, .5);
+}
+
+.bg-01 {
+	background-color: #3b3b3b;
+}
+
+.bg-02 {
+	background-color: #e5b669;
+}
+
+.bg-03 {
+	background-color: #fff;
+}
+
+.bg-04 {
+	background-color: #444444;
+}
+
+/* box - BOX PROPERTIES _____________________________________________________ */
+
+/* Padded box */
+.box-pad {
+	padding: 0.2em 1em;
+}
+
+/* Box shadow */
+.box-shadow {
+	box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Box shadow 02 */
+.box-shadow-02 {
+	box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* txt - TEXT PROPERTIES */
+
+/* Case Uppercase */
+.txt-cup {
+	text-transform: uppercase;
+}
+
+/* Color Black */
+.txt-clr-black {
+	color: #161616;
+}
+
+/* Color White */
+.txt-clr-white {
+	color: #f7f7f7;
+}
+
+.txt-bold {
+	font-weight: bold;
+}
+
+.txt-center {
+	text-align: center;
+}
+
+/* fl - FLEX PROPERTIES _____________________________________________________ */
+
+/* Display flex */
+.fl-box {
+	display: flex;
+}
+
+.fl-wrap {
+	flex-wrap: wrap;
+}
+
+/* Space between */
+.fl-space {
+	justify-content: space-between;
+}
+
+/* Center */
+.fl-center {
+	justify-content: center;
+}
+
+
+/* wth - WIDTH PROPERTIES ___________________________________________________ */
+
+.wth-50 {
+	width: 49%;
+}
+
+.wth-max-100 {
+	max-width: 100%;
+}
+
+.wth-100 {
+	width: 100%;
+}
+
+
+/* hth - HEIGTH PROPERTIES __________________________________________________ */
+
+.hth-max-100 {
+	max-height: 100%;
+}
+
+.hth-380 {
+	height: 380px;
+}
+
+.hth-vh-100 {
+	height:  100vh;
+}
+
+/* float - FLOAT PROPERTIES __________________________________________________*/
+
+.float-left {
+	float: left;
+}
+
+
+/* marg - MARGIN PROPERTIES ________________________________________________*/
+
+.marg-right {
+	margin-right: 5em;
+}
+
+.marg-sides-auto {
+	margin: 0 auto;
+}
+
+
+/* pad - PADDING PROPERTIES _________________________________________________ */
+
+.pad-right {
+	padding-right: 5em;
+}
+
+.pad-top {
+	padding-top: 2em;
+}
+
+.pad-uniform {
+	padding: 1em;
+}
+
+.pad-sides {
+	padding-left: 3em;
+	padding-right: 3em;
+}
+
+/* bor - BORDER PROPERTIES __________________________________________________ */
+.bor-right {
+	border-right: 1px #c8c8c8 solid;
+}
+
+.bor-left {
+	border-left: 1px #c8c8c8 solid;
+}
+
+/* Border rounded on top */
+.bor-radius-top {
+	border-radius: 20px 20px 0 0;
+}
+
+/* Border rounded */
+.bor-radius {
+	border-radius: 20px;
+}
+
+
+/* UI SPECIFICS _____________________________________________________________ */
+
+#side-bar {
+	list-style: none;
+}
+
+.option {
+	color: #8F8F8F;
+	text-transform: uppercase;
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+
+.option:hover {
+	color: #F0F0F0;
+	cursor: pointer;
+}
+
+.option--active {
+	color: #3b3b3b;
+}
+
+.option--active:hover {
+	color: #3b3b3b;
+	cursor: default;
+}
