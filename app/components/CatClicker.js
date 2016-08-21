@@ -5,14 +5,16 @@ import MainContent from './MainContent';
 class CatClicker extends Component {
 
 	render() {
+		let activeCat = this.props.catCallbacks.getActiveCat();
 		return (
 			<div id="app-wrapper">
 				<SideBar
 					cats={this.props.cats}
+					activeCat={activeCat.id}
 					changeActive={this.catCallbacks.changeActive}
 				/>
 				<MainContent
-					cat={this.props.catCallbacks.getActiveCat()}
+					cat={activeCat}
 					countOne={this.props.catCallbacks.countOne}
 				/>
 			</div>

@@ -14,7 +14,7 @@ class MainContent extends Component {
 				<div className="bor-radius bg-04 bor-full box-shadow-02">
 					<img
 						src={this.props.cat.img}
-						onClick={this.props.countOne}
+						onClick={this.props.countOne.bind(null, this.props.cat.id)}
 						alt={`Picture of ${this.props.cat.name} cat`}
 						className="wth-max-100 hth-max-100 bor-radius-top"
 					/>
