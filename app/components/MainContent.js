@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import SideBar from './SideBar';
 import MainContent from './MainContent';
 
 class MainContent extends Component {
@@ -13,19 +12,24 @@ class MainContent extends Component {
 					</p>
 				</div>
 				<div className="bor-radius bg-04 bor-full box-shadow-02">
-					
+					<img
+						src={this.props.cat.img}
+						onClick={this.props.countOne}
+						alt={`Picture of ${this.props.cat.name} cat`}
+						className="wth-max-100 hth-max-100 bor-radius-top"
+					/>
+					<p className="dtl-no-pad-mar marg-top wth-100 txt-center txt-bold txt-clr-white wth-50 txt-cup box-pad">
+						{this.props.cat.name}
+					</p>
 				</div>
 			</div>
 		);
 	}
 }
 
-export default MainContent;
+MainContent.propTypes = {
+	cat: PropTypes.object.isRequired,
+	countOne: PropTypes.function.isRequired
+};
 
-'<div id="score" class="ps-abs ps-tlf bg-fff-t box-pad bor-radius">' +
-			'<p class="txt-cup">Times Clicked: <span id="counter-' + this.id + '">' + this.counter + '</span></p>' +
-		'</div>' +
-		'<div class="bor-radius bg-04 bor-full box-shadow-02">' +
-			'<img src="' + this.img + '" alt="little kitten ' + this.id + '" data-id="' + this.id + '" class="wth-max-100 hth-max-100 bor-radius-top">' +
-			'<p class="dtl-no-pad-mar marg-top wth-100 txt-center txt-bold txt-clr-white wth-50 txt-cup box-pad">' + this.name + '</p>' +
-		'</div>'
+export default MainContent;
