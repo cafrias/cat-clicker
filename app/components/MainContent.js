@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MainContent from './MainContent';
 
 class MainContent extends Component {
 	render() {
@@ -29,7 +28,7 @@ class MainContent extends Component {
 
 MainContent.propTypes = {
 	cat: PropTypes.object.isRequired,
-	countOne: PropTypes.function.isRequired
+	countOne: PropTypes.func.isRequired
 };
 
 export default MainContent;

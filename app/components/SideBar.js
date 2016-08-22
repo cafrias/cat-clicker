@@ -10,7 +10,7 @@ class SideBar extends Component {
 	}
 
 	clickHandler(evt) {
-		let targetID = evt.target.attributes.key;
+		let targetID = evt.target.attributes['data-id'].value;
 		this.props.changeActive(targetID);
 	}
 
@@ -19,15 +19,16 @@ class SideBar extends Component {
 			return (
 				<li
 					key={cat.id}
-					className={cat.id == this.props.activeCat.id ? 'option--active' : ''}
+					data-id={cat.id}
+					className={cat.id == this.props.activeCat.id ? 'option--active' : ''}					
 				>
 					{cat.name}
 				</li>
 			);
 		});
 		return (
-			<div class="float-left pad-sides bg-02 hth-vh-100 pad-top box-shadow">
-				<ul id="side-bar" class="dtl-no-pad-mar wth-100" role="nav"
+			<div className="float-left pad-sides bg-02 hth-vh-100 pad-top box-shadow">
+				<ul id="side-bar" className="dtl-no-pad-mar wth-100" role="nav"
 					onClick={this.clickHandler}
 				>
 					{items}
@@ -39,9 +40,9 @@ class SideBar extends Component {
 }
 
 SideBar.propTypes = {
-	activeCat: PropTypes.number.isRequired,
-	cat: PropTypes.object.isRequired,
-	changeActive: PropTypes.function.isRequired
+	activeCat: PropTypes.object.isRequired,
+	cats: PropTypes.array.isRequired,
+	changeActive: PropTypes.func.isRequired
 };
 
 export default SideBar;

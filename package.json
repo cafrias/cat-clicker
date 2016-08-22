@@ -38,6 +38,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "jest": {
-    "automock": false
+    "automock": false,
+    "testRegex": "__tests__/.*\\-test\\.js$"
   }
 }

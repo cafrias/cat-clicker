@@ -10,8 +10,8 @@ class CatClicker extends Component {
 			<div id="app-wrapper">
 				<SideBar
 					cats={this.props.cats}
-					activeCat={activeCat.id}
-					changeActive={this.catCallbacks.changeActive}
+					activeCat={activeCat}
+					changeActive={this.props.catCallbacks.changeActive}
 				/>
 				<MainContent
 					cat={activeCat}

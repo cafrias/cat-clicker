@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import update from 'react-addons-update';
-// import CatClicker from 'CatClicker';
+import CatClicker from './CatClicker';
 
 class CatClickerContainer extends Component {
 	
